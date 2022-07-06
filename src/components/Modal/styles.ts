@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import mixins from 'styles/mixins';
 
 export const SModal = styled.div`
   position: fixed;
@@ -32,14 +33,28 @@ export const SModal = styled.div`
       transform: translate3d(0, -20px, 0);
       opacity: 0;
       transition: 0.2s;
+      border-radius: 8px;
+      background: #F5F7F8;
+      max-width: 415px;
+      margin: auto;
+
       .rc-md__content-header {
         position: relative;
         padding-right: 15px;
+        background-color: #ef5350;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 22px;
+        color: white;
+        padding: 16px;
+        padding-left: 30px;
+
         .rc-md__header-close {
           position: absolute;
           right: 15px;
           top: 15px;
           z-index: 1;
+          ${mixins.clickable};
         }
       }
     }

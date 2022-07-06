@@ -15,4 +15,8 @@ export const SSearch = styled.div`
     line-height: 20px;
     flex-grow: 1;
   }
+
+  svg {
+    margin-top: 3px;
+  }
 `;

@@ -18,9 +18,9 @@ const buttonTheme: Record<ButtonTheme, any> = {
     color: 'white',
   },
   white: {
-    background: 'white',
+    background: '#F5F7F8',
     color: '#455A64',
-    border: '1px solid #455A64',
+    border: '1px solid #455a64',
   },
 };
 

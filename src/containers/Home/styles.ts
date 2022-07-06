@@ -20,9 +20,6 @@ export const SHome = styled.div`
         display: flex;
         flex-wrap: wrap;
         margin-bottom: 32px;
-        button {
-          margin-left: 9px;
-        }
       }
     }
   }

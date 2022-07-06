@@ -18,6 +18,9 @@ export const SListItem = styled.div`
   .item {
     &__label {
       flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &.completed {
         text-decoration: line-through;
       }

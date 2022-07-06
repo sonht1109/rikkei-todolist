@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 // json
 import vi from "assets/languages/vi.json";
 import en from "assets/languages/en.json";
-import useCountRenders from "hooks/useCountRenders";
 import { appSelector } from "./store";
 
 const translatesJson = {
@@ -20,8 +19,6 @@ interface Props {
 
 export default function LanguageProvider({ children }: Props): ReactElement {
   const { lang } = useSelector(appSelector);
-
-  useCountRenders("LanguageProvider");
 
   return (
     <IntlProvider

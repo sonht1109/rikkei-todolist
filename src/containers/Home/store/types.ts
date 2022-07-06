@@ -14,7 +14,7 @@ export interface Todo {
   active: boolean;
   completed: boolean;
   createdAt: string;
-  id: string;
+  id?: string;
 }
 
 export interface HomeState {

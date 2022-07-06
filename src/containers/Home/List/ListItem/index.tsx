@@ -1,18 +1,51 @@
 import ErrorBound from 'components/ErrorBound';
 import { Radio } from 'components/Input';
 import { SListItem } from './styles';
-import classNames from 'classnames'
+import classNames from 'classnames';
+import { Todo } from 'containers/Home/store';
+import { useDispatch } from 'react-redux';
+import { handleDelete, handleUpdate } from 'containers/Home/store/actions';
+import useDisclosure from 'hooks/useDisclosure';
+import ItemModal from 'containers/Home/ItemModal';
+import toast from 'react-hot-toast';
 
-interface Props {}
+interface Props {
+  d: Todo;
+}
 
-export default function ListItem(props: Props) {
+type KeyOfTodo = keyof Todo;
+
+export default function ListItem({ d }: Props) {
+  const [state, handler] = useDisclosure(false);
+
+  const dispatch = useDispatch();
+
+  const onUpdateItem = (newProps: { [k in KeyOfTodo]?: any }) => {
+    dispatch(handleUpdate({ ...d, ...newProps }));
+  };
+
+  const onDelete = () => {
+    if (d.id) {
+      dispatch(handleDelete(d.id));
+      toast.success('Task is deleted');
+    }
+  };
+
   return (
     <ErrorBound>
-      <SListItem>
-        <Radio checked />
-        <div className={classNames("item__label")}>Task</div>
+      <SListItem className={classNames({ inactived: !d.active })}>
+        <Radio
+          checked={d.completed}
+          onChange={() => onUpdateItem({ completed: !d.completed })}
+        />
+        <div className={classNames('item__label', { completed: d.completed })}>
+          {d.title}
+        </div>
         <div className="item__handle--container">
-          <div className="item__handle">
+          <div
+            className="item__handle"
+            onClick={() => onUpdateItem({ active: !d.active })}
+          >
             <svg
               width="16"
               height="10"
@@ -26,7 +59,7 @@ export default function ListItem(props: Props) {
               />
             </svg>
           </div>
-          <div className="item__handle">
+          <div className="item__handle" onClick={handler.open}>
             <svg
               width="16"
               height="16"
@@ -40,7 +73,7 @@ export default function ListItem(props: Props) {
               />
             </svg>
           </div>
-          <div className="item__handle">
+          <div className="item__handle" onClick={onDelete}>
             <svg
               width="16"
               height="16"
@@ -68,6 +101,7 @@ export default function ListItem(props: Props) {
           </div>
         </div>
       </SListItem>
+      <ItemModal isOpen={state} toggleModal={handler.toggle} editingTodo={d} />
     </ErrorBound>
   );
 }

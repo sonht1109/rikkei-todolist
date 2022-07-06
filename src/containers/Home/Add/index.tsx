@@ -10,7 +10,7 @@ export default function Add(props: Props) {
 
   return (
     <ErrorBound>
-      <Button style={{ flexGrow: 1 }} onClick={handler.open}>
+      <Button style={{ flexGrow: 1, marginLeft: 9 }} onClick={handler.open}>
         <svg
           width="20"
           height="20"
@@ -28,7 +28,7 @@ export default function Add(props: Props) {
           <path
             d="M4.16666 10H15.8333"
             stroke="white"
-            stroke-width="2"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />

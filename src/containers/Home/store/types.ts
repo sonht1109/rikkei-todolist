@@ -11,7 +11,6 @@ export interface Todo {
   member: string;
   title: string;
   desc: string;
-  active: boolean;
   completed: boolean;
   createdAt: string;
   id?: string;

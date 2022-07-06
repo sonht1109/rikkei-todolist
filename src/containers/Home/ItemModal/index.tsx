@@ -3,7 +3,7 @@ import Input from 'components/Input';
 import InputWrapper from 'components/Input/InputWrapper';
 import ValidateMessage from 'components/Input/ValidateMessage';
 import Modal from 'components/Modal';
-import { generateId } from 'helpers';
+import { generateId, isDefined } from 'helpers';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -13,17 +13,22 @@ import { handleAdd, handleUpdate } from '../store/actions';
 import { SModalContent } from './styles';
 
 interface Props {
-  editingTodo?: Todo;
+  todo?: Todo;
   isOpen: boolean;
   toggleModal: () => void;
+  isEditing?: boolean;
 }
 
 export default function ItemModal(props: Props) {
-  const { editingTodo, isOpen, toggleModal } = props;
+  const { todo, isOpen, toggleModal, isEditing = false } = props;
 
-  const isEditing = editingTodo ? true : false;
+  const disabled = !isEditing && isDefined(todo);
 
-  const title = isEditing ? 'Edit The Task' : 'Add Task';
+  const title = disabled
+    ? 'Task Detail'
+    : isEditing
+    ? 'Edit The Task'
+    : 'Add Task';
 
   const dispatch = useDispatch();
 
@@ -37,11 +42,10 @@ export default function ItemModal(props: Props) {
 
   const onSubmit = (values: any) => {
     if (isEditing) {
-      dispatch(handleUpdate({ ...editingTodo, ...values.todo }));
+      dispatch(handleUpdate({ ...todo, ...values.todo }));
       toast.success('Task is added');
     } else {
       const todo: Todo = {
-        active: true,
         completed: false,
         createdAt: new Date().toISOString(),
         id: generateId(),
@@ -55,10 +59,10 @@ export default function ItemModal(props: Props) {
   };
 
   useEffect(() => {
-    if (editingTodo && isOpen) {
-      setValue('todo', editingTodo);
+    if (todo && isOpen) {
+      setValue('todo', todo);
     }
-  }, [editingTodo, setValue, isOpen]);
+  }, [todo, setValue, isOpen]);
 
   return (
     <Modal {...{ title, isOpen, toggleModal }}>
@@ -66,6 +70,7 @@ export default function ItemModal(props: Props) {
         <form className="modal__form">
           <InputWrapper label="Member">
             <Input
+              disabled={disabled}
               {...register('todo.member', {
                 required: 'This field is required',
               })}
@@ -74,6 +79,7 @@ export default function ItemModal(props: Props) {
           </InputWrapper>
           <InputWrapper label="Title">
             <Input
+              disabled={disabled}
               {...register('todo.title', {
                 required: 'This field is required',
               })}
@@ -82,6 +88,7 @@ export default function ItemModal(props: Props) {
           </InputWrapper>
           <InputWrapper label="Description">
             <Input
+              disabled={disabled}
               {...register('todo.desc', {
                 required: 'This field is required',
               })}
@@ -89,23 +96,25 @@ export default function ItemModal(props: Props) {
             <ValidateMessage {...{ errors, name: 'todo.desc' }} />
           </InputWrapper>
         </form>
-        <div className="modal__footer">
-          <Button
-            className="modal__footer__btn"
-            themeColor="white"
-            onClick={toggleModal}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="modal__footer__btn"
-            themeColor="red"
-            type="button"
-            onClick={handleSubmit(onSubmit)}
-          >
-            Apply
-          </Button>
-        </div>
+        {!disabled && (
+          <div className="modal__footer">
+            <Button
+              className="modal__footer__btn"
+              themeColor="white"
+              onClick={toggleModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="modal__footer__btn"
+              themeColor="red"
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Apply
+            </Button>
+          </div>
+        )}
       </SModalContent>
     </Modal>
   );

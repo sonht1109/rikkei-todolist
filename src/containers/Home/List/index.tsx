@@ -13,7 +13,7 @@ export default function List(props: Props) {
   const filterData = () => {
     let tmp = data.filter(d => d?.title?.toLowerCase().includes(keyword));
     if (filter === EnumTodoFilterType.ACTIVE) {
-      tmp = tmp.filter(d => d.active === true);
+      tmp = tmp.filter(d => d.completed === false);
     } else if (filter === EnumTodoFilterType.COMPLETED) {
       tmp = tmp.filter(d => d.completed === true);
     }

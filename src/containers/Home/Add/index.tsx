@@ -1,12 +1,16 @@
 import Button from 'components/Button';
 import ErrorBound from 'components/ErrorBound';
+import useDisclosure from 'hooks/useDisclosure';
+import ItemModal from '../ItemModal';
 
 interface Props {}
 
 export default function Add(props: Props) {
+  const [state, handler] = useDisclosure(false);
+
   return (
     <ErrorBound>
-      <Button style={{flexGrow: 1}}>
+      <Button style={{ flexGrow: 1 }} onClick={handler.open}>
         <svg
           width="20"
           height="20"
@@ -31,6 +35,7 @@ export default function Add(props: Props) {
         </svg>
         Add new
       </Button>
+      <ItemModal isOpen={state} toggleModal={handler.toggle} />
     </ErrorBound>
   );
 }

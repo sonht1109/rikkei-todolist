@@ -12,10 +12,17 @@ const mixins = {
     inset: 0;
   `,
 
+  absCenter: css`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  `,
+
   clickable: css`
     cursor: pointer;
     user-select: none;
-  `
+  `,
 };
 
 export default mixins;

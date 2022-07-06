@@ -1,45 +1,41 @@
-/*
- *
- * Home
- *
- */
-
-import React, { memo } from 'react';
 import ErrorBound from 'components/ErrorBound';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import Add from './Add';
+import Handle from './Handle';
+import List from './List';
+import Search from './Search';
+import { SHome } from './styles';
 
 interface Props {}
 
-type LoginFormData = {
-  phone: string;
-  password: string;
-};
-// eslint-disable-next-line
-function Home({}: Props) {
-  const { register, handleSubmit } = useForm<LoginFormData>();
-
-  const onSubmit = (data: LoginFormData) => {
-    toast.success('Welcome');
-  };
-
+export default function Home(props: Props) {
   return (
     <ErrorBound>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input type="text" name="phone" ref={register({ required: true })} />
+      <SHome>
+        <div className="home--container">
+          <div className="header">Todo List</div>
+          <div className="content">
+            <div className="content__search">
+              <Search
+                onSearch={val => {
+                  console.log(val);
+                }}
+              />
+              <Add />
+            </div>
+
+            <div className="content__handle">
+              <Handle />
+            </div>
+
+            <div className="content__list">
+              <List />
+            </div>
+            
+          </div>
         </div>
-        <div>
-          <input
-            type="text"
-            name="password"
-            ref={register({ required: true })}
-          />
-        </div>
-        <button type="submit">SUBMIT</button>
-      </form>
+      </SHome>
     </ErrorBound>
   );
 }
 
-export default memo(Home);
+Home.displayName = Home;

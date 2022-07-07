@@ -8,6 +8,7 @@ import { handleDelete, handleUpdate } from 'containers/Home/store/actions';
 import useDisclosure from 'hooks/useDisclosure';
 import ItemModal from 'containers/Home/ItemModal';
 import toast from 'react-hot-toast';
+import { format } from 'date-fns';
 
 interface Props {
   d: Todo;
@@ -22,15 +23,24 @@ export default function ListItem({ d }: Props) {
     dispatch(handleUpdate({ ...d, ...newProps }));
   };
 
+  const isOverDeadline =
+    !d?.completed && d?.deadline && new Date(d.deadline).getTime() < Date.now();
+
   return (
     <ErrorBound>
-      <SListItem>
+      <SListItem className={classNames({ 'over-deadline': isOverDeadline })}>
         <Radio
           checked={d.completed}
           onChange={() => onUpdateItem({ completed: !d.completed })}
         />
         <div className={classNames('item__label', { completed: d.completed })}>
-          {d.title}
+          <span>{d.title}</span>
+          <br />
+          {d?.deadline && (
+            <span className="item__deadline">
+              Deadline: {format(new Date(d.deadline), 'dd/MM/yyyy, HH:mm')}
+            </span>
+          )}
         </div>
         <div className="item__handle--container">
           <ViewBtn d={d} />

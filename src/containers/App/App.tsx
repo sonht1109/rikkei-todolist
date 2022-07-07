@@ -13,6 +13,7 @@ import { appSelector } from './store';
 import Loading from 'components/Loading';
 import { Toaster } from 'react-hot-toast';
 import GlobalSetup from 'components/Layout/GlobalSetup';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function App() {
   const { loading } = useSelector(appSelector);

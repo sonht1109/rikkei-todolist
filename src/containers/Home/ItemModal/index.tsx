@@ -1,11 +1,14 @@
 import Button from 'components/Button';
-import Input from 'components/Input';
-import InputWrapper from 'components/Input/InputWrapper';
-import ValidateMessage from 'components/Input/ValidateMessage';
+import {
+  DateInput,
+  Input,
+  InputWrapper,
+  ValidateMessage,
+} from 'components/Input';
 import Modal from 'components/Modal';
 import { generateId, isDefined } from 'helpers';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { Todo } from '../store';
@@ -38,12 +41,13 @@ export default function ItemModal(props: Props) {
     register,
     reset,
     setValue,
+    control,
   } = useForm();
 
   const onSubmit = (values: any) => {
     if (isEditing) {
       dispatch(handleUpdate({ ...todo, ...values.todo }));
-      toast.success('Task is added');
+      toast.success('Task is updated');
     } else {
       const todo: Todo = {
         completed: false,
@@ -52,7 +56,7 @@ export default function ItemModal(props: Props) {
         ...values.todo,
       };
       dispatch(handleAdd(todo));
-      toast.success('Task is updated');
+      toast.success('Task is added');
     }
     toggleModal();
     reset();
@@ -94,6 +98,21 @@ export default function ItemModal(props: Props) {
               })}
             />
             <ValidateMessage {...{ errors, name: 'todo.desc' }} />
+          </InputWrapper>
+          <InputWrapper label="Deadline">
+            <Controller
+              name="todo.deadline"
+              control={control}
+              render={({ field: { value, ref, ...rest } }) => (
+                <DateInput selected={value} {...rest} showTimeSelect={true} />
+              )}
+              rules={{
+                validate: value =>
+                  !value || new Date(value).getTime() > Date.now() ||
+                  'Deadline must be greater than now',
+              }}
+            />
+            <ValidateMessage {...{ errors, name: 'todo.deadline' }} />
           </InputWrapper>
         </form>
         {!disabled && (

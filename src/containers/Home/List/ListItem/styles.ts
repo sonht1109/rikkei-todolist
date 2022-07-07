@@ -11,6 +11,13 @@ export const SListItem = styled.div`
 
   display: flex;
 
+  &.over-deadline {
+    border-color: #ef5350;
+    .item__label {
+      color: #ef5350;
+    }
+  }
+
   &.inactived {
     opacity: 0.6;
   }
@@ -24,6 +31,10 @@ export const SListItem = styled.div`
       &.completed {
         text-decoration: line-through;
       }
+    }
+
+    &__deadline {
+      font-size: 12px;
     }
 
     &__handle--container {

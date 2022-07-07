@@ -14,6 +14,7 @@ export interface Todo {
   completed: boolean;
   createdAt: string;
   id?: string;
+  deadline: string;
 }
 
 export interface HomeState {

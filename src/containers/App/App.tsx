@@ -5,6 +5,7 @@ import theme from 'styles/theme';
 import 'styles/fonts.css'; // import config font define
 // diff import
 import Home from 'containers/Home';
+import Member from 'containers/Member';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import NotFoundPage from 'components/NotFoundPage';
@@ -26,6 +27,9 @@ function App() {
           <Switch>
             <Route exact path="/">
               <Home />
+            </Route>
+            <Route exact path="/member">
+              <Member />
             </Route>
 
             <Route path="*">

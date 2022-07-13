@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
+import db from './db';
 
 export default function GlobalSetup() {
   useEffect(() => {
-    // global call api or something else
+    db.data?.members.push({age: 18, name: "String"})
   }, []);
 
   return null;

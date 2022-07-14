@@ -10,7 +10,7 @@ export const SHome = styled.div`
       line-height: 33px;
       color: #263238;
       text-align: center;
-      border-bottom: 1px solid #EAEAEA;
+      border-bottom: 1px solid #eaeaea;
       padding: 15px 10px 10px;
     }
     .content {
@@ -22,5 +22,9 @@ export const SHome = styled.div`
         margin-bottom: 32px;
       }
     }
+  }
+
+  .pagination {
+    justify-content: center;
   }
 `;

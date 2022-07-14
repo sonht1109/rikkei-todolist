@@ -15,6 +15,7 @@ import Loading from 'components/Loading';
 import { Toaster } from 'react-hot-toast';
 import GlobalSetup from 'components/Layout/GlobalSetup';
 import 'react-datepicker/dist/react-datepicker.css';
+import Layout from 'components/Layout';
 
 function App() {
   const { loading } = useSelector(appSelector);
@@ -24,18 +25,20 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalSetup />
         <Router>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="/member">
-              <Member />
-            </Route>
+          <Layout>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/member">
+                <Member />
+              </Route>
 
-            <Route path="*">
-              <NotFoundPage />
-            </Route>
-          </Switch>
+              <Route path="*">
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </Layout>
         </Router>
         {/* // extra config global */}
         {loading && <Loading />}

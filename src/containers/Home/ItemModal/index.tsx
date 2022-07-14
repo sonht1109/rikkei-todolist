@@ -3,11 +3,14 @@ import {
   DateInput,
   Input,
   InputWrapper,
+  Select,
   ValidateMessage,
 } from 'components/Input';
 import Modal from 'components/Modal';
+import { getMemberById, getMembers } from 'containers/Member/store/actions';
 import { generateId, isDefined } from 'helpers';
-import { useEffect } from 'react';
+import { Option } from 'helpers/types';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
@@ -45,6 +48,7 @@ export default function ItemModal(props: Props) {
   } = useForm();
 
   const onSubmit = (values: any) => {
+    values.todo.member = values.todo.member.value;
     if (isEditing) {
       dispatch(handleUpdate({ ...todo, ...values.todo }));
       toast.success('Task is updated');
@@ -64,20 +68,48 @@ export default function ItemModal(props: Props) {
 
   useEffect(() => {
     if (todo && isOpen) {
+      if (todo?.deadline) {
+        todo.deadline = new Date(todo.deadline);
+      }
+
       setValue('todo', todo);
+
+      const selectedMember = getMemberById(todo.member);
+      if (selectedMember) {
+        setValue('todo.member', {
+          label: selectedMember?.name,
+          value: selectedMember?.id,
+        });
+      }
     }
   }, [todo, setValue, isOpen]);
+
+  const [members, setMembers] = useState<Option[]>([]);
+
+  useEffect(() => {
+    if (!disabled && isOpen) {
+      const members = getMembers({take: 10}).data;
+      if (members.length) {
+        const mappedMembers: Option[] = members.map(d => ({
+          label: d.name,
+          value: d.id,
+        }));
+        setMembers(mappedMembers);
+      }
+    }
+  }, [disabled, isOpen]);
 
   return (
     <Modal {...{ title, isOpen, toggleModal }}>
       <SModalContent>
         <form className="modal__form">
           <InputWrapper label="Member">
-            <Input
-              disabled={disabled}
-              {...register('todo.member', {
-                required: 'This field is required',
-              })}
+            <Controller
+              control={control}
+              name="todo.member"
+              render={({ field: { ref, ...rest } }) => (
+                <Select {...rest} options={members} isDisabled={disabled} />
+              )}
             />
             <ValidateMessage {...{ errors, name: 'todo.member' }} />
           </InputWrapper>
@@ -104,11 +136,17 @@ export default function ItemModal(props: Props) {
               name="todo.deadline"
               control={control}
               render={({ field: { value, ref, ...rest } }) => (
-                <DateInput selected={value} {...rest} showTimeSelect={true} />
+                <DateInput
+                  selected={value}
+                  {...rest}
+                  showTimeSelect={true}
+                  minDate={new Date()}
+                />
               )}
               rules={{
                 validate: value =>
-                  !value || new Date(value).getTime() > Date.now() ||
+                  !value ||
+                  new Date(value).getTime() > Date.now() ||
                   'Deadline must be greater than now',
               }}
             />

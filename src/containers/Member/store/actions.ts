@@ -48,14 +48,13 @@ export const handleUpdate = (payload: Member) => (dispatch: any) => {
     tmp[index] = { ...payload };
     updateMembersInStore(tmp);
   }
-
   dispatch(refetch());
 };
 
 export const handleDelete = (id: string) => (dispatch: any) => {
   const tmp = getMembersFromStore().filter(d => d.id !== id);
   updateMembersInStore(tmp);
-  dispatch(refetch());
+  dispatch(setPage(1));
 }
 
 export const getMembers = ({

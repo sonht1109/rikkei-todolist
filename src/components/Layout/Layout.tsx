@@ -5,10 +5,16 @@ import styled from 'styled-components';
 interface Props {}
 
 const Layout: FC<Props> = props => {
+
   return (
     <SLayout>
       <nav className="nav">
-        <NavLink to="/">Todo</NavLink>
+        <NavLink
+          to="/"
+          exact
+        >
+          Todo
+        </NavLink>
         <NavLink to="/member">Members</NavLink>
       </nav>
       {props.children}

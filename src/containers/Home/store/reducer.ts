@@ -2,13 +2,15 @@ import { HomeState, HomeAction, EnumTodoFilterType } from './types';
 import * as consts from './constants';
 import { AppState } from 'redux/types';
 import { Reducer } from 'redux';
-import { LOCAL_STORAGE_KEY } from 'helpers/constants';
-import { isDefined } from 'helpers';
 
 const initState: HomeState = {
   data: [],
   filter: EnumTodoFilterType.ALL,
   keyword: '',
+  take: 5,
+  page: 1,
+  shouldRefetch: false,
+  total: 0
 };
 
 export const homeReducer: Reducer<HomeState, HomeAction> = (
@@ -24,31 +26,24 @@ export const homeReducer: Reducer<HomeState, HomeAction> = (
       return { ...state, keyword: action.payload };
     }
 
-    case consts.ADD: {
-      const tmp = [...state.data];
-      tmp.unshift(action.payload);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: tmp }));
-      return { ...state, data: [...tmp] };
-    }
-
-    case consts.UPDATE_ITEM: {
-      const tmp = [...state.data];
-      const index = tmp.findIndex(d => d.id === action.payload.id);
-      if (isDefined(index)) {
-        tmp[index] = { ...action.payload };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ data: tmp }));
-        return { ...state, data: [...tmp] };
-      }
-      return { ...state };
-    }
-
     case consts.SET_DATA: {
       return { ...state, data: [...action.payload] };
     }
 
-    case consts.DELETE_ITEM: {
-      let tmp = state.data.filter(d => d.id !== action.payload);
-      return { ...state, data: [...tmp] };
+    case consts.SET_PAGE: {
+      return { ...state, page: action.payload };
+    }
+
+    case consts.SET_TAKE: {
+      return { ...state, take: action.payload };
+    }
+
+    case consts.SET_TOTAL: {
+      return { ...state, total: action.payload };
+    }
+
+    case consts.REFETCH: {
+      return { ...state, shouldRefetch: !state.shouldRefetch };
     }
 
     default:

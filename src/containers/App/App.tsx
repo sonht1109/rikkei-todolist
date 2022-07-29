@@ -44,7 +44,7 @@ function App() {
         {loading && <Loading />}
         <GlobalStyle />
         <Toaster
-          position="top-center"
+          position="bottom-left"
           toastOptions={{
             duration: 4000,
           }}
